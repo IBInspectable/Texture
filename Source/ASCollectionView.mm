@@ -2050,6 +2050,7 @@ static NSString * const kReuseIdentifier = @"_ASCollectionReuseIdentifier";
   }
 
   // Wrap the node block
+  BOOL disableRangeController = ASCellLayoutModeIncludes(ASCellLayoutModeDisableRangeController);
   __weak __typeof__(self) weakSelf = self;
   return ^{
     __typeof__(self) strongSelf = weakSelf;
@@ -2057,6 +2058,9 @@ static NSString * const kReuseIdentifier = @"_ASCollectionReuseIdentifier";
     ASDisplayNodeAssert([node isKindOfClass:[ASCellNode class]],
                         @"ASCollectionNode provided a non-ASCellNode! %@, %@", node, strongSelf);
 
+    if (!disableRangeController) {
+      [node enterHierarchyState:ASHierarchyStateRangeManaged];
+    }
     if (node.interactionDelegate == nil) {
       node.interactionDelegate = strongSelf;
     }
